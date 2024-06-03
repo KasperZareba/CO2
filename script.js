@@ -1,3 +1,13 @@
+// Function to escape HTML
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 $(document).ready(function() {
     $('#myTable').DataTable({
         columns: [
@@ -16,13 +26,23 @@ $(document).ready(function() {
             ["Frankreich", "Franc", "1092", "JA"],
             ["Tschechien", "Budwaiser", "692", "JA"],
             ["Deutschland", "Bombardier", "192", "NEIN"]
-        ],
+        ].map(row => row.map(cell => escapeHtml(cell))), 
+
         responsive: true,
         dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        lengthChange: false, // Wyłączenie opcji "Show X entries"
-        info: false, // Wyłączenie informacji "Showing X to X of X entries"
-        paging: false // Wyłączenie przycisków "Previous" i "Next"
+        lengthChange: false,
+        info: false,
+        paging: false
     });
+
+    // Dynamic direction setting
+    const lang = document.documentElement.lang;
+    const navbarContainer = document.getElementById('navbar-container');
+    if (lang === 'ar' || lang === 'he') {
+        navbarContainer.dir = 'rtl';
+    } else {
+        navbarContainer.dir = 'ltr';
+    }
 });
